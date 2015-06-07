@@ -1,0 +1,5 @@
+{
+  "test": {},
+  "buildWatch": ["index.js"],
+  "sourcegate": [{"recipe": "eslint", "preset": "airbnb"}]
+}
