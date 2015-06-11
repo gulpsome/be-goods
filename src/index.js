@@ -1,6 +1,7 @@
 require('source-map-support').install()
-let flaments = require('./pollen.json')
+import path from 'path'
 import sourcegate from 'sourcegate'
+let flaments = require(path.normalize('../src/pollen.json'))
 
 export function pollen(anthers) {
   let got = anthers.map(select => {

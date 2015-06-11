@@ -1,1 +1,1 @@
-index.es5 -diff
+lib/*.es5.js -diff

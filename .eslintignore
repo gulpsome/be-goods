@@ -2,4 +2,4 @@
 **/*.js
 
 # except:
-!index.js
+!src/*.js

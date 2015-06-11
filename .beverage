@@ -1,5 +1,10 @@
 {
+  "scripts": {
+    "include": {
+      "build": "lib/index.es5.js"
+    }
+  },
   "test": {},
-  "buildWatch": ["index.js"],
+  "buildWatch": ["src/*.js"],
   "sourcegate": [{"recipe": "eslint", "preset": "airbnb"}]
 }
