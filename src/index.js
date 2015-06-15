@@ -1,7 +1,25 @@
 require('source-map-support').install()
 
+import R from 'ramda'
 import path from 'path'
+import help from 'gulp-help'
 import sourcegate from 'sourcegate'
+
+export const pkg = require(path.join(process.cwd(), 'package.json'))
+
+export function gulpIsHelpful(gulp) {
+  return R.is(Object, R.path(['help', 'help'], gulp.tasks))
+}
+
+export function gulpHelpify(gulp, opts) {
+  return gulpIsHelpful(gulp) ? gulp : help(gulp, opts)
+}
+
+// Helpful task creation.  The given desc is discarded if gulp isn't gulp-help "helpful".
+export function gulpTask(gulp, name, desc, ...rest) {
+  let args = (gulpIsHelpful(gulp)) ? [].concat(name, desc, rest) : [].concat(name, rest)
+  return gulp.task.apply(gulp, args)
+}
 
 export function pollen(anthers, where) {
   let flaments = require(where || path.normalize('../src/pollen.json'))

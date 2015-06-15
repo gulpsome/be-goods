@@ -7,7 +7,7 @@
     "configuration",
     "options"
   ],
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": {
     "type": "git",
     "url": "git://github.com/orlin/stamina.git"
@@ -15,6 +15,7 @@
   "author": "Orlin M Bozhinov <om@soundsapiens.com>",
   "main": "lib/index.es5.js",
   "dependencies": {
+    "gulp-help": "^1.6.0",
     "ramda": "^0.14.0",
     "source-map-support": "^0.2.10",
     "sourcegate": "^0.1.3"

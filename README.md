@@ -1,8 +1,6 @@
-# stamina
+# stamina -- plural of stamen
 
-Plural of stamen.
-Offers pollen to beverage.
-Will soon export more...
+Utility exports for the [beverage](https://github.com/orlin/beverage) umbrella of modules.
 
 ## Unlicensed
 
