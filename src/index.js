@@ -18,7 +18,7 @@ export function gulpHelpify(gulp, opts) {
 // Helpful task creation.  The given desc is discarded if gulp isn't gulp-help "helpful".
 export function gulpTask(gulp, name, desc, ...rest) {
   let args = (gulpIsHelpful(gulp)) ? [].concat(name, desc, rest) : [].concat(name, rest)
-  return gulp.task.apply(gulp, args)
+  return gulp.task(...args)
 }
 
 export function pollen(anthers, where) {
