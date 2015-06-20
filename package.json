@@ -32,10 +32,5 @@
     "build:watch": "npm run build -- -w",
     "test": "node_modules/.bin/gulp"
   },
-  "licenses": [
-    {
-      "type": "Unlicense",
-      "url": "http://unlicense.org/"
-    }
-  ]
+  "licenses": "Unlicense"
 }
