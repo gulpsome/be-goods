@@ -1,6 +1,7 @@
 # stamina -- plural of stamen
 
-Utility exports for the [beverage](https://github.com/orlin/beverage) umbrella of modules.
+This became [be-goods](https://github.com/orlin/be-goods).
+The module will be repurposed...
 
 ## Unlicensed
 
