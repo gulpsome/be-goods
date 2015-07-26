@@ -5,6 +5,8 @@ import path from 'path'
 import help from 'gulp-help'
 import sourcegate from 'sourcegate'
 
+global.console.warn('Please use the be-goods module, stamina will be repurposed.')
+
 export const pkg = require(path.join(process.cwd(), 'package.json'))
 
 export function gulpIsHelpful(gulp) {
