@@ -1,13 +1,12 @@
-# stamina -- plural of stamen
+# be-goods -- beverage-goods
 
-Utility exports for the [beverage](https://github.com/orlin/beverage) umbrella of modules.
+Utility exports for [beverage](https://github.com/orlin/beverage) modules.
 
 ## Dependencies
 
-[![Dependency Status](https://david-dm.org/orlin/stamina.svg)](https://david-dm.org/orlin/stamina)
-[![devDependency Status](https://david-dm.org/orlin/stamina/dev-status.svg)](https://david-dm.org/orlin/stamina#info=devDependencies)
+[![Dependency Status](https://david-dm.org/orlin/be-goods.svg)](https://david-dm.org/orlin/be-goods)
+[![devDependency Status](https://david-dm.org/orlin/be-goods/dev-status.svg)](https://david-dm.org/orlin/be-goods#info=devDependencies)
 
-## Unlicensed
+## License
 
-This is free and unencumbered public domain software.
-For more information, see [UNLICENSE](http://unlicense.org).
+[MIT](http://orlin.mit-license.org)
