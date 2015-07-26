@@ -1,16 +1,16 @@
 {
-  "name": "stamina",
-  "description": "is the plural of stamen",
+  "name": "be-goods",
+  "description": "let there be beverage goods",
   "keywords": [
     "gulp",
     "beverage",
-    "configuration",
-    "options"
+    "workflow",
+    "helpers"
   ],
-  "version": "0.0.4",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "git://github.com/orlin/stamina.git"
+    "url": "git://github.com/orlin/be-goods.git"
   },
   "author": "Orlin M Bozhinov <om@soundsapiens.com>",
   "main": "lib/index.es5.js",
@@ -32,5 +32,5 @@
     "build:watch": "npm run build -- -w",
     "test": "node_modules/.bin/gulp"
   },
-  "license": "Unlicense"
+  "license": "MIT"
 }
