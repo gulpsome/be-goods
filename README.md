@@ -1,6 +1,7 @@
-# be-goods -- beverage-goods
+# be-goods -- gulp beverage goods
 
-Utility exports for [beverage](https://github.com/orlin/beverage) modules.
+Utility exports for [beverage](https://github.com/orlin/beverage) /
+gulp / workflow modules.
 
 ## Dependencies
 
