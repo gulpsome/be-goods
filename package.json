@@ -26,6 +26,7 @@
     "beverage": "0.0.3",
     "eslint": "^0.24.1",
     "gulp": "^3.9.0",
+    "gulp-cause": "0.0.5",
     "gulp-npm-run": "0.0.1",
     "gulp-npm-test": "0.0.2",
     "hal-rc": "0.0.6"
