@@ -5,6 +5,6 @@
     }
   },
   "test": {},
-  "buildWatch": ["src/*.js"],
-  "sourcegate": [{"recipe": "eslint", "preset": "airbnb"}]
+  "sourcegate": [{"recipe": "eslint", "preset": "airbnb"}],
+  "causality": ["build", ["src/*.js"]]
 }
