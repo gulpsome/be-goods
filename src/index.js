@@ -4,6 +4,7 @@ import R from 'ramda'
 import path from 'path'
 import help from 'gulp-help'
 import sourcegate from 'sourcegate'
+import chalk from 'chalk'
 
 export const pkg = require(path.join(process.cwd(), 'package.json'))
 
@@ -15,6 +16,13 @@ export function isLocal(name) {
 export function myRequire(name) {
   let where = path.normalize(`${process.cwd()}/node_modules/${name}`)
   return require(path.join(where, require(path.join(where, 'package.json')).main))
+}
+
+export function console(opts) {
+  return require('tracer').console(opts || {
+    'filters': {'log': chalk.green, 'warn': chalk.yellow, 'error': chalk.red},
+    'format': `<${pkg.name} using {{path}}:{{line}}>\n{{message}}\n`
+  })
 }
 
 export function gulpIsHelpful(gulp) {
