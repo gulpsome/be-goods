@@ -5,6 +5,6 @@
     }
   },
   "test": {},
-  "sourcegate": [{"recipe": "eslint", "preset": "airbnb"}],
+  "sourcegate": [{"recipe": "eslint", "sources": {"extends": ["standard"]}}],
   "causality": ["build", ["src/*.js"]]
 }
