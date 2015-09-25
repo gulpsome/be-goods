@@ -5,6 +5,7 @@ import path from 'path'
 import help from 'gulp-help'
 import sourcegate from 'sourcegate'
 import chalk from 'chalk'
+import tracer from 'tracer'
 
 export const pkg = require(path.join(process.cwd(), 'package.json'))
 
@@ -18,12 +19,10 @@ export function myRequire(name) {
   return require(path.join(where, require(path.join(where, 'package.json')).main))
 }
 
-export function console(opts) {
-  return require('tracer').console(opts || {
-    'filters': {'log': chalk.green, 'warn': chalk.yellow, 'error': chalk.red},
-    'format': `<${pkg.name} using {{path}}:{{line}}>\n{{message}}\n`
-  })
-}
+export let logger = tracer.console({
+  'filters': {'log': chalk.green, 'warn': chalk.yellow, 'error': chalk.red},
+  'format': `<${pkg.name} using {{path}}:{{line}}>\n{{message}}\n`
+})
 
 export function gulpIsHelpful(gulp) {
   return R.is(Object, R.path(['help', 'help'], gulp.tasks))
