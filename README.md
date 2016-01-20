@@ -1,4 +1,4 @@
-# be-goods -- gulp beverage goods
+# be-goods -- gulp beverage goods [![version npm](https://img.shields.io/npm/v/be-goods.svg?style=flat-square)](https://www.npmjs.com/package/be-goods)
 
 [![NPM](https://nodei.co/npm/be-goods.png?mini=true)](https://www.npmjs.org/package/be-goods)
 
