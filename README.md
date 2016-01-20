@@ -5,7 +5,7 @@
 Utility exports for [beverage](https://github.com/gulpsome/beverage) /
 gulp / workflow helpers.
 
-## Develop [![Dependency Status](https://david-dm.org/gulpsome/be-goods.svg)](https://david-dm.org/gulpsome/be-goods) [![devDependency Status](https://david-dm.org/gulpsome/be-goods/dev-status.svg)](https://david-dm.org/gulpsome/be-goods#info=devDependencies)
+## Develop [![Dependency Status](https://david-dm.org/gulpsome/be-goods.svg?style=flat-square)](https://david-dm.org/gulpsome/be-goods) [![devDependency Status](https://david-dm.org/gulpsome/be-goods/dev-status.svg?style=flat-square)](https://david-dm.org/gulpsome/be-goods#info=devDependencies)
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
