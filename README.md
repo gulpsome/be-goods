@@ -7,6 +7,10 @@ gulp / workflow helpers.
 
 ## Develop [![Dependency Status](https://david-dm.org/gulpsome/be-goods.svg?style=flat-square)](https://david-dm.org/gulpsome/be-goods) [![devDependency Status](https://david-dm.org/gulpsome/be-goods/dev-status.svg?style=flat-square)](https://david-dm.org/gulpsome/be-goods#info=devDependencies)
 
+```sh
+gulp dev
+```
+
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 ## License
