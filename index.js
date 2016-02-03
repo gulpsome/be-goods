@@ -38,8 +38,11 @@ export function gulpTask(gulp, name, desc, ...rest) {
   return gulp.task(...args)
 }
 
+// See https://github.com/gulpsome/gulp-harp about how to pollinate options.
+// Originally the defaults were here in pollen.json but that felt wrong and got moved.
+// Since there are no other use cases for this so far, it doesn't seem very useful.
 export function pollen(anthers, where) {
-  let flaments = require(where || path.normalize('../src/pollen.json'))
+  let flaments = require(where || path.normalize('pollen.json'))
   let got = anthers.map(select => {
     return typeof select === 'string' ? flaments[select] : select // object assumed
   })
