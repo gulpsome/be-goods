@@ -26,7 +26,7 @@
     "babel": "^6.3.26",
     "babel-cli": "^6.4.5",
     "babel-eslint": "^4.1.8",
-    "babel-preset-es2015-mod": "^6.3.13",
+    "babel-preset-es2015-mod": "^6.6.0",
     "beverage": "0.0.6",
     "eslint": "^1.10.3",
     "eslint-config-standard": "^4.4.0",
