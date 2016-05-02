@@ -29,6 +29,8 @@ export function myRequire (name, home = '') {
 export function reqFn (opts = {}) {
   opts.module = opts.module || 'beverage'
   opts.locate = opts.locate || `node_modules/${opts.module}`
+  opts.dev = opts.dev || false
+  opts.exitOnError = opts.exitOnError || false
 
   return function (name) {
     if (isLocal(name)) {
@@ -39,7 +41,14 @@ export function reqFn (opts = {}) {
       try {
         return myRequire(name, opts.locate)
       } catch (e) {
-        logger.error(`Please install ${name} as a devDependency.`)
+        let dependency = opts.dev ? 'devDependency' : 'dependency'
+        console.log(chalk.red(`Could not find module ${name}!`))
+        console.log(`Please install ${name} as a ${dependency}.`)
+        if (opts.exitOnError) {
+          process.exit(1)
+        } else {
+          throw new Error(e)
+        }
       }
     }
   }
