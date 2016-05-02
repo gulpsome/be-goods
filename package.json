@@ -5,9 +5,10 @@
     "gulp",
     "beverage",
     "workflow",
-    "helpers"
+    "helpers",
+    "require"
   ],
-  "version": "0.0.5",
+  "version": "0.0.6",
   "repository": {
     "type": "git",
     "url": "git@github.com:gulpsome/be-goods.git"

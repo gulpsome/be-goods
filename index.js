@@ -26,7 +26,7 @@ export function myRequire (name, home = '') {
   return require(path.join(where, main))
 }
 
-export function reqFn (opts = {}) {
+export function prefquire (opts = {}) {
   opts.module = opts.module || 'beverage'
   opts.locate = opts.locate || `node_modules/${opts.module}`
   opts.dev = opts.dev || false
