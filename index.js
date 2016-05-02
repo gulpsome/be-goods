@@ -23,20 +23,25 @@ export function myRequire (name, home = '') {
   let place = `${home}/node_modules/${name}`
   let where = path.normalize(`${process.cwd()}/${place}`)
   let main = require(path.join(where, 'package.json')).main
-  // console.log(`require ${place}`)
   return require(path.join(where, main))
 }
 
-export function req (name) {
-  if (isLocal(name)) {
-    // local means relative to `process.cwd()`
-    return myRequire(name)
-  } else {
-    if (R.not(R.contains(name, ['hal-rc', 'gulp-cause', 'gulp-npm-run']))) {
-      // the above list of exceptions contains modules that will remain bundled as beverage dependencies
-      logger.error(`Please install ${name} as a devDependency.`)
+export function reqFn (opts = {}) {
+  opts.module = opts.module || 'beverage'
+  opts.locate = opts.locate || `node_modules/${opts.module}`
+
+  return function (name) {
+    if (isLocal(name)) {
+      // local means relative to `process.cwd()`
+      return myRequire(name)
+    } else {
+      // try to `locate` in a default `module`'s dependencies`
+      try {
+        return myRequire(name, opts.locate)
+      } catch (e) {
+        logger.error(`Please install ${name} as a devDependency.`)
+      }
     }
-    return myRequire(name, 'node_modules/beverage')
   }
 }
 
