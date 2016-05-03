@@ -3,7 +3,19 @@
 [![NPM](https://nodei.co/npm/be-goods.png?mini=true)](https://www.npmjs.org/package/be-goods)
 
 Utility exports for [beverage](https://github.com/gulpsome/beverage) /
-gulp / workflow helpers.  About half of the exports are rather generic.  Especially `prefquire` which is a `require` that prefers local modules.  It takes some preferences and returns a customized "`require`" function.  Perhaps it would be worthwhile to extract it into its own repository / packaged module... It needs a few of the other be-goods exports though, which in turn are used by some of the other beverage modules, so perhaps it's just a bit of a "who cares"?
+gulp / workflow helpers.  About half of the exports are rather generic.  Especially `prefquire` which is a `require` that prefers local modules.  It takes some options and returns a customized "`require`" function.  Perhaps it would be worthwhile to extract it into its own repository / packaged module... It needs a few of the other be-goods exports though, which in turn are used by some of the other beverage modules, so perhaps it's just a bit of a "who cares"?  It kind of enables peer-dependencies making a library lighter.  It also gives one better control over the versions of modules being required.  This is convenient for modules getting new features more independently and allows having more granular control of upgrades.  For example:
+
+```js
+var req = require('be-goods').prefquire({module: 'try-here-too'})
+var aModule = req('a-module')
+```
+
+Trying to require `a-module` from:
+
+1. `./node_modules/a-module`
+2. `./node_modules/try-here-too/node_modules/a-module`
+
+The path to `try-here-too` can be anywhere you please, by calling for example `prefquire({locate: 'anywhere/try-here-too'})`.  There are a few more options available, see the source code for details.
 
 ## Develop [![Dependency Status](https://david-dm.org/gulpsome/be-goods.svg?style=flat-square)](https://david-dm.org/gulpsome/be-goods) [![devDependency Status](https://david-dm.org/gulpsome/be-goods/dev-status.svg?style=flat-square)](https://david-dm.org/gulpsome/be-goods#info=devDependencies)
 
