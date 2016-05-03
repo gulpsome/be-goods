@@ -54,6 +54,18 @@ export function prefquire (opts = {}) {
   }
 }
 
+export function isSmth (o, what) {
+  if (((o || {}).constructor || {}).name === what) {
+    return true
+  } else {
+    return false
+  }
+}
+
+export function isGulp (o) {
+  return isSmth(o, 'Gulp')
+}
+
 export function gulpIsHelpful (gulp) {
   return R.is(Object, R.path(['help', 'help'], gulp.tasks))
 }
