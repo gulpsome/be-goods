@@ -47,27 +47,36 @@ function prefquireHow (o) {
   return o
 }
 
+function prefquireError (name, o, e) {
+  let dependency = o.dev ? 'devDependency' : 'dependency'
+  let wordLocal = o.forceLocal ? 'local ' : ''
+  console.log(chalk.red(`Could not find module ${name}!`))
+  console.log(`Please install ${name} as a ${wordLocal}${dependency}.`)
+  if (o.exitOnError) {
+    process.exit(1)
+  } else {
+    throw new Error(e)
+  }
+}
+
 export function prefquire (opts = {}) {
   let def = prefquireHow(opts)
 
   return function (name, opts = {}) {
     let o = prefquireHow(R.merge(def, opts)) // override-able defaults
-    if (isLocal(name)) {
+    if (o.forceLocal || isLocal(name)) {
       // local means relative to `process.cwd()`
-      return myRequire(name)
+      try {
+        return myRequire(name)
+      } catch (e) {
+        prefquireError(name, o, e)
+      }
     } else {
       // try to `locate` in a default `module`'s dependencies`
       try {
         return myRequire(name, o.locate)
       } catch (e) {
-        let dependency = o.dev ? 'devDependency' : 'dependency'
-        console.log(chalk.red(`Could not find module ${name}!`))
-        console.log(`Please install ${name} as a ${dependency}.`)
-        if (o.exitOnError) {
-          process.exit(1)
-        } else {
-          throw new Error(e)
-        }
+        prefquireError(name, o, e)
       }
     }
   }
