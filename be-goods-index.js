@@ -6,6 +6,7 @@ import help from 'gulp-help'
 import sourcegate from 'sourcegate'
 import chalk from 'chalk'
 import tracer from 'tracer'
+import isThere from 'is-there'
 
 export const pkg = require(path.join(process.cwd(), 'package.json'))
 
@@ -14,16 +15,28 @@ export let logger = tracer.console({
   'format': `<${pkg.name} using {{path}}:{{line}}>\n{{message}}\n`
 })
 
-export function isLocal (name) {
-  let dep = R.has(name)
-  return dep(pkg.dependencies || {}) || dep(pkg.devDependencies || {})
+function myRequirePath (name, home = '') {
+  let place = `${home}/node_modules/${name}`
+  let where = path.normalize(`${process.cwd()}/${place}`)
+  try {
+    let main = require(path.join(where, 'package.json')).main || 'index.js'
+    return path.join(where, main)
+  } catch (e) {
+    return undefined
+  }
 }
 
 export function myRequire (name, home = '') {
-  let place = `${home}/node_modules/${name}`
-  let where = path.normalize(`${process.cwd()}/${place}`)
-  let main = require(path.join(where, 'package.json')).main || 'index.js'
-  return require(path.join(where, main))
+  return require(myRequirePath(name, home))
+}
+
+export function isLocal (name, opts = {}) {
+  let o = {}
+  o.strict = opts === true || opts.strict || false // opts === true is strict
+  let dep = R.has(name)
+  let isDependency = dep(pkg.dependencies || {}) || dep(pkg.devDependencies || {})
+  let exists = o.strict ? isThere(myRequirePath('gulp')) : true
+  return isDependency && exists
 }
 
 export function prefquire (opts = {}) {
