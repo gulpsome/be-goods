@@ -60,8 +60,8 @@ export function prefquire (opts = {}) {
     } catch (e) {
       let dependency = o.dev ? 'devDependency' : 'dependency'
       let wordLocal = o.forceLocal ? 'local ' : ''
-      console.log(chalk.red(`Could not find module ${name}!`))
-      console.log(`Please install ${name} as a ${wordLocal}${dependency}.`)
+      console.error(chalk.red(`Could not find module ${name}!`))
+      console.error(`Please install ${name} as a ${wordLocal}${dependency}.`)
       if (o.exitOnError) {
         process.exit(1)
       } else {
