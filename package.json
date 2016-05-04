@@ -14,7 +14,7 @@
     "url": "git@github.com:gulpsome/be-goods.git"
   },
   "author": "Orlin M Bozhinov <om@soundsapiens.com>",
-  "main": "be-goods-index.es5.js",
+  "main": "be-goods.es5.js",
   "dependencies": {
     "chalk": "^1.1.3",
     "gulp-help": "^1.6.1",
@@ -35,7 +35,7 @@
     "gulp": "3.9.1"
   },
   "scripts": {
-    "build": "node_modules/.bin/babel be-goods-index.js -o be-goods-index.es5.js --source-maps inline",
+    "build": "node_modules/.bin/babel be-goods.js -o be-goods.es5.js --source-maps inline",
     "build:watch": "npm run build -- -w",
     "test": "node_modules/.bin/beverage"
   },
