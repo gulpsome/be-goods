@@ -22,7 +22,7 @@ export function isLocal (name) {
 export function myRequire (name, home = '') {
   let place = `${home}/node_modules/${name}`
   let where = path.normalize(`${process.cwd()}/${place}`)
-  let main = require(path.join(where, 'package.json')).main
+  let main = require(path.join(where, 'package.json')).main || 'index.js'
   return require(path.join(where, main))
 }
 
