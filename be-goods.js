@@ -39,25 +39,31 @@ export function isLocal (name, opts = {}) {
   return isDependency && exists
 }
 
-export function prefquire (opts = {}) {
-  opts.module = opts.module || 'beverage'
-  opts.locate = opts.locate || `node_modules/${opts.module}`
-  opts.dev = opts.dev || false
-  opts.exitOnError = opts.exitOnError || false
+function prefquireHow (o) {
+  o.module = o.module || 'beverage'
+  o.locate = o.locate || `node_modules/${o.module}`
+  o.dev = o.dev || false
+  o.exitOnError = o.exitOnError || false
+  return o
+}
 
-  return function (name) {
+export function prefquire (opts = {}) {
+  let def = prefquireHow(opts)
+
+  return function (name, opts = {}) {
+    let o = prefquireHow(R.merge(def, opts)) // override-able defaults
     if (isLocal(name)) {
       // local means relative to `process.cwd()`
       return myRequire(name)
     } else {
       // try to `locate` in a default `module`'s dependencies`
       try {
-        return myRequire(name, opts.locate)
+        return myRequire(name, o.locate)
       } catch (e) {
-        let dependency = opts.dev ? 'devDependency' : 'dependency'
+        let dependency = o.dev ? 'devDependency' : 'dependency'
         console.log(chalk.red(`Could not find module ${name}!`))
         console.log(`Please install ${name} as a ${dependency}.`)
-        if (opts.exitOnError) {
+        if (o.exitOnError) {
           process.exit(1)
         } else {
           throw new Error(e)
