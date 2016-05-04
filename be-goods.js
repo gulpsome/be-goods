@@ -6,6 +6,7 @@ import help from 'gulp-help'
 import sourcegate from 'sourcegate'
 import chalk from 'chalk'
 import tracer from 'tracer'
+import isThere from 'is-there'
 
 export const pkg = require(path.join(process.cwd(), 'package.json'))
 
@@ -14,41 +15,57 @@ export let logger = tracer.console({
   'format': `<${pkg.name} using {{path}}:{{line}}>\n{{message}}\n`
 })
 
-export function isLocal (name) {
-  let dep = R.has(name)
-  return dep(pkg.dependencies || {}) || dep(pkg.devDependencies || {})
+function myRequirePath (name, home = '') {
+  let place = `${home}/node_modules/${name}`
+  let where = path.normalize(`${process.cwd()}/${place}`)
+  try {
+    let main = require(path.join(where, 'package.json')).main || 'index.js'
+    return path.join(where, main)
+  } catch (e) {
+    return undefined
+  }
 }
 
 export function myRequire (name, home = '') {
-  let place = `${home}/node_modules/${name}`
-  let where = path.normalize(`${process.cwd()}/${place}`)
-  let main = require(path.join(where, 'package.json')).main
-  return require(path.join(where, main))
+  return require(myRequirePath(name, home))
+}
+
+export function isLocal (name, opts = {}) {
+  let o = {}
+  o.strict = opts === true || opts.strict || false // opts === true is strict
+  let dep = R.has(name)
+  let isDependency = dep(pkg.dependencies || {}) || dep(pkg.devDependencies || {})
+  let exists = o.strict ? isThere(myRequirePath('gulp')) : true
+  return isDependency && exists
+}
+
+function prefquireHow (o) {
+  o.module = o.module || 'beverage'
+  o.locate = o.locate || `node_modules/${o.module}`
+  o.dev = o.dev || false
+  o.exitOnError = o.exitOnError || false
+  return o
 }
 
 export function prefquire (opts = {}) {
-  opts.module = opts.module || 'beverage'
-  opts.locate = opts.locate || `node_modules/${opts.module}`
-  opts.dev = opts.dev || false
-  opts.exitOnError = opts.exitOnError || false
+  let def = prefquireHow(opts)
 
-  return function (name) {
-    if (isLocal(name)) {
-      // local means relative to `process.cwd()`
-      return myRequire(name)
-    } else {
-      // try to `locate` in a default `module`'s dependencies`
-      try {
-        return myRequire(name, opts.locate)
-      } catch (e) {
-        let dependency = opts.dev ? 'devDependency' : 'dependency'
-        console.log(chalk.red(`Could not find module ${name}!`))
-        console.log(`Please install ${name} as a ${dependency}.`)
-        if (opts.exitOnError) {
-          process.exit(1)
-        } else {
-          throw new Error(e)
-        }
+  return function (name, opts = {}) {
+    let o = prefquireHow(R.merge(def, opts)) // override-able defaults
+    let elsewhere = (o.forceLocal || isLocal(name)) ? undefined : o.locate
+    try {
+      // undefined = local means relative to `process.cwd()` it's expected to be
+      // elsewhere is to `locate` it in a default `module`'s dependencies`
+      return myRequire(name, elsewhere)
+    } catch (e) {
+      let dependency = o.dev ? 'devDependency' : 'dependency'
+      let wordLocal = o.forceLocal ? 'local ' : ''
+      console.error(chalk.red(`Could not find module ${name}!`))
+      console.error(`Please install ${name} as a ${wordLocal}${dependency}.`)
+      if (o.exitOnError) {
+        process.exit(1)
+      } else {
+        throw new Error(e)
       }
     }
   }
