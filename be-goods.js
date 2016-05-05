@@ -18,7 +18,6 @@ function myRequirePath (name, home = '') {
   let place = path.join(home, `node_modules/${name}`)
   let where = path.normalize(`${process.cwd()}/${place}`)
   try {
-    // console.log(`Requiring: ${where}`)
     let main = require(path.join(where, 'package.json')).main || 'index.js'
     return path.join(where, main)
   } catch (e) {
@@ -38,7 +37,8 @@ export function isLocal (name, opts = {}) {
 function prefquireHow (o) {
   o.module = o.module || 'beverage'
   o.locate = o.locate || `node_modules/${o.module}`
-  o.dev = o.dev || false
+  o.dev = o.dev || false // is it devDependencies that are expected?
+  o.logPath = o.logPath || false // log each path before trying to require it
   o.throwOnError = o.throwOnError || true
   o.exitOnError = o.exitOnError || false // uncaught throw will cause exit anyway
   return o
@@ -53,7 +53,11 @@ export function prefquire (opts = {}) {
     try {
       // undefined = local means relative to `process.cwd()` it's expected to be
       // elsewhere is to `locate` it in a default `module`'s dependencies`
-      return require(myRequirePath(name, elsewhere))
+      let reqPath = myRequirePath(name, elsewhere)
+      if (o.logPath) {
+        console.log(`Requiring: ${reqPath}`)
+      }
+      return require(reqPath)
     } catch (e) {
       let dependency = o.dev ? 'devDependency' : 'dependency'
       let wordLocal = o.forceLocal ? 'local ' : ''
