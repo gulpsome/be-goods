@@ -3,7 +3,6 @@ import 'source-map-support/register'
 import R from 'ramda'
 import path from 'path'
 import help from 'gulp-help'
-import sourcegate from 'sourcegate'
 import chalk from 'chalk'
 import tracer from 'tracer'
 import isThere from 'is-there'
@@ -16,9 +15,10 @@ export let logger = tracer.console({
 })
 
 function myRequirePath (name, home = '') {
-  let place = `${home}/node_modules/${name}`
+  let place = path.join(home, `node_modules/${name}`)
   let where = path.normalize(`${process.cwd()}/${place}`)
   try {
+    // console.log(`Requiring: ${where}`)
     let main = require(path.join(where, 'package.json')).main || 'index.js'
     return path.join(where, main)
   } catch (e) {
@@ -39,7 +39,8 @@ function prefquireHow (o) {
   o.module = o.module || 'beverage'
   o.locate = o.locate || `node_modules/${o.module}`
   o.dev = o.dev || false
-  o.exitOnError = o.exitOnError || false
+  o.throwOnError = o.throwOnError || true
+  o.exitOnError = o.exitOnError || false // uncaught throw will cause exit anyway
   return o
 }
 
@@ -56,12 +57,13 @@ export function prefquire (opts = {}) {
     } catch (e) {
       let dependency = o.dev ? 'devDependency' : 'dependency'
       let wordLocal = o.forceLocal ? 'local ' : ''
-      console.error(chalk.red(`Could not find module ${name}!`))
+      console.error(chalk.red(`Could not find or require module ${name}!`))
       console.error(`Please install ${name} as a ${wordLocal}${dependency}.`)
+      if (o.throwOnError) {
+        throw new Error(e)
+      }
       if (o.exitOnError) {
         process.exit(1)
-      } else {
-        throw new Error(e)
       }
     }
   }
@@ -102,16 +104,4 @@ export function gulpHelpify (gulp, opts) {
 export function gulpTask (gulp, name, desc, ...rest) {
   let args = (gulpIsHelpful(gulp)) ? [].concat(name, desc, rest) : [].concat(name, rest)
   return gulp.task(...args)
-}
-
-// TODO: phase out at some point?
-// See https://github.com/gulpsome/gulp-harp about how to pollinate options.
-// Originally the defaults were here in pollen.json but that felt wrong and got moved.
-// Since there are no other use cases for this so far, it doesn't seem very useful.
-export function pollen (anthers, where) {
-  let flaments = require(where || path.normalize('pollen.json'))
-  let got = anthers.map(select => {
-    return typeof select === 'string' ? flaments[select] : select // object assumed
-  })
-  return sourcegate(got)
 }

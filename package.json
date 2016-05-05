@@ -21,7 +21,6 @@
     "is-there": "4.3.2",
     "ramda": "^0.21.0",
     "source-map-support": "^0.4.0",
-    "sourcegate": "^0.1.4",
     "tracer": "^0.8.3"
   },
   "devDependencies": {
