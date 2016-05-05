@@ -26,10 +26,6 @@ function myRequirePath (name, home = '') {
   }
 }
 
-export function myRequire (name, home = '') {
-  return require(myRequirePath(name, home))
-}
-
 export function isLocal (name, opts = {}) {
   let o = {}
   o.strict = opts === true || opts.strict || false // opts === true is strict
@@ -56,7 +52,7 @@ export function prefquire (opts = {}) {
     try {
       // undefined = local means relative to `process.cwd()` it's expected to be
       // elsewhere is to `locate` it in a default `module`'s dependencies`
-      return myRequire(name, elsewhere)
+      return require(myRequirePath(name, elsewhere))
     } catch (e) {
       let dependency = o.dev ? 'devDependency' : 'dependency'
       let wordLocal = o.forceLocal ? 'local ' : ''
@@ -69,6 +65,17 @@ export function prefquire (opts = {}) {
       }
     }
   }
+}
+
+// TODO: deprecate / refactor?
+// Its only value is perhaps:
+// 1. being more concise than prefquire setup (just one call, minimum args)
+// 2. able to require a module from somewhere without trying locally first
+// if kept, refactor it to use prefquire...
+export function myRequire (name, home = '') {
+  console.warn(chalk.red('Please look at the prefquire function instead.'))
+  console.warn('Not sure what the future of myRequire will hold...')
+  return require(myRequirePath(name, home))
 }
 
 export function isSmth (o, what) {
@@ -97,6 +104,7 @@ export function gulpTask (gulp, name, desc, ...rest) {
   return gulp.task(...args)
 }
 
+// TODO: phase out at some point?
 // See https://github.com/gulpsome/gulp-harp about how to pollinate options.
 // Originally the defaults were here in pollen.json but that felt wrong and got moved.
 // Since there are no other use cases for this so far, it doesn't seem very useful.
