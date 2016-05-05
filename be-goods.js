@@ -3,7 +3,6 @@ import 'source-map-support/register'
 import R from 'ramda'
 import path from 'path'
 import help from 'gulp-help'
-import sourcegate from 'sourcegate'
 import chalk from 'chalk'
 import tracer from 'tracer'
 import isThere from 'is-there'
@@ -16,7 +15,7 @@ export let logger = tracer.console({
 })
 
 function myRequirePath (name, home = '') {
-  let place = `${home}/node_modules/${name}`
+  let place = path.join(home, `node_modules/${name}`)
   let where = path.normalize(`${process.cwd()}/${place}`)
   try {
     let main = require(path.join(where, 'package.json')).main || 'index.js'
@@ -24,10 +23,6 @@ function myRequirePath (name, home = '') {
   } catch (e) {
     return undefined
   }
-}
-
-export function myRequire (name, home = '') {
-  return require(myRequirePath(name, home))
 }
 
 export function isLocal (name, opts = {}) {
@@ -42,8 +37,10 @@ export function isLocal (name, opts = {}) {
 function prefquireHow (o) {
   o.module = o.module || 'beverage'
   o.locate = o.locate || `node_modules/${o.module}`
-  o.dev = o.dev || false
-  o.exitOnError = o.exitOnError || false
+  o.dev = o.dev || false // is it devDependencies that are expected?
+  o.logPath = o.logPath || false // log each path before trying to require it
+  o.throwOnError = o.throwOnError || true
+  o.exitOnError = o.exitOnError || false // uncaught throw will cause exit anyway
   return o
 }
 
@@ -56,19 +53,35 @@ export function prefquire (opts = {}) {
     try {
       // undefined = local means relative to `process.cwd()` it's expected to be
       // elsewhere is to `locate` it in a default `module`'s dependencies`
-      return myRequire(name, elsewhere)
+      let reqPath = myRequirePath(name, elsewhere)
+      if (o.logPath) {
+        console.log(`Requiring: ${reqPath}`)
+      }
+      return require(reqPath)
     } catch (e) {
       let dependency = o.dev ? 'devDependency' : 'dependency'
       let wordLocal = o.forceLocal ? 'local ' : ''
-      console.error(chalk.red(`Could not find module ${name}!`))
+      console.error(chalk.red(`Could not find or require module ${name}!`))
       console.error(`Please install ${name} as a ${wordLocal}${dependency}.`)
+      if (o.throwOnError) {
+        throw new Error(e)
+      }
       if (o.exitOnError) {
         process.exit(1)
-      } else {
-        throw new Error(e)
       }
     }
   }
+}
+
+// TODO: deprecate / refactor?
+// Its only value is perhaps:
+// 1. being more concise than prefquire setup (just one call, minimum args)
+// 2. able to require a module from somewhere without trying locally first
+// if kept, refactor it to use prefquire...
+export function myRequire (name, home = '') {
+  console.warn(chalk.red('Please look at the prefquire function instead.'))
+  console.warn('Not sure what the future of myRequire will hold...')
+  return require(myRequirePath(name, home))
 }
 
 export function isSmth (o, what) {
@@ -95,15 +108,4 @@ export function gulpHelpify (gulp, opts) {
 export function gulpTask (gulp, name, desc, ...rest) {
   let args = (gulpIsHelpful(gulp)) ? [].concat(name, desc, rest) : [].concat(name, rest)
   return gulp.task(...args)
-}
-
-// See https://github.com/gulpsome/gulp-harp about how to pollinate options.
-// Originally the defaults were here in pollen.json but that felt wrong and got moved.
-// Since there are no other use cases for this so far, it doesn't seem very useful.
-export function pollen (anthers, where) {
-  let flaments = require(where || path.normalize('pollen.json'))
-  let got = anthers.map(select => {
-    return typeof select === 'string' ? flaments[select] : select // object assumed
-  })
-  return sourcegate(got)
 }
